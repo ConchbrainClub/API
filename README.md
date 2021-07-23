@@ -6,7 +6,6 @@ A web api base on PowerShell
 
 Install pre-requisites
 
-- dotnet-sdk
 - powershell core
 - sqlite3
 
