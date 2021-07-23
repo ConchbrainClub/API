@@ -1,13 +1,23 @@
-## ConchBrainClub official website api
+## ConchBrain club official website api
+
+A web api base on PowerShell
+
+#### How to Contribute?
+
+Install pre-requisites
+
+- dotnet-sdk
+- powershell core
+- sqlite3
 
 
-### Restore Dependence
+Restore Dependence
 
 ```pwsh
 pwsh restore.ps1
 ```
 
-### Run Project
+Run Project
 
 ```pwsh
 cd src
