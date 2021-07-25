@@ -80,7 +80,7 @@ function Search-Recommend {
     $Query = 'SELECT * FROM Recommends WHERE "title" LIKE @keyword OR "desc" LIKE @keyword ORDER BY "id" DESC LIMIT @offset,@size;'
 
     $Result = Invoke-SqliteQuery -DataSource $Database -Query $Query -SqlParameters @{
-        keyword = $Keyword
+        keyword = "%$Keyword%"
         offset = $Offset
         size = $Size
     }

@@ -1,8 +1,8 @@
 class Recommend {
     [int]$Id
-    [string]$Title
-    [string]$Cover
-    [string]$Desc
-    [string]$Link
-    [string]$Lang
+    [ValidateNotNullOrEmpty()][string]$Title
+    [ValidateNotNullOrEmpty()][string]$Cover
+    [ValidateNotNullOrEmpty()][string]$Desc
+    [ValidateNotNullOrEmpty()][string]$Link
+    [ValidateNotNullOrEmpty()][string]$Lang
 }
