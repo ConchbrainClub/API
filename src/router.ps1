@@ -1,5 +1,3 @@
-Import-Module Polaris
-
 $PageSize = 8
 
 New-PolarisGetRoute -Path "/*" -Scriptblock {
