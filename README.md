@@ -1,7 +1,5 @@
 ## ConchBrain club official website api
 
-A web api base on PowerShell
-
 #### Install pre-requisites
 
 - powershell core
