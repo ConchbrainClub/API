@@ -1,3 +1,4 @@
+. ./Models/*.ps1
 . ./database.ps1
 ./router.ps1
 

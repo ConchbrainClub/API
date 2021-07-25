@@ -1,40 +1,91 @@
 Import-Module PSSQLite
 
+$Database = "../Conchbrain.db"
+
 function Add-Recommend {
     param (
-        $Article
+        [Recommend]$Recommend
     )
-    Write-Output "Add-Recommend"
+
+    $Query = 'INSERT INTO Recommends VALUES(NULL, @title, @cover, @desc, @link, @lang);'
+
+    $Result = Invoke-SqliteQuery -DataSource $Database -Query $Query -SqlParameters @{
+        title = $Recommend.Title
+        cover = $Recommend.Cover
+        desc = $Recommend.Desc
+        link = $Recommend.Link
+        lang = $Recommend.Lang
+    }
+
+    Write-Output $Result
 }
 
 function Remove-Recommend {
     param (
         $Id
     )
-    Write-Output "Remove-Recommend"
+
+    $Query = 'DELETE FROM Recommends WHERE "id" = @id;'
+
+    $Result = Invoke-SqliteQuery -DataSource $Database -Query $Query -SqlParameters @{
+        id = $Id
+    }
+
+    Write-Output $Result
 }
 
 function Edit-Recommend {
     param (
         $Id,
-        $Article
+        $Recommend
     )
-    Write-Output "Edit-Recommend"
+    
+    $Query = 'UPDATE Recommends SET "title" = @title, "cover" = @cover, "desc" = @desc, "link" = @link, "lang" = @lang WHERE "id" = @id;'
+
+    $Result = Invoke-SqliteQuery -DataSource $Database -Query $Query -SqlParameters @{
+        id = $Id
+        title = $Recommend.Title
+        cover = $Recommend.Cover
+        desc = $Recommend.Desc
+        link = $Recommend.Link
+        lang = $Recommend.Lang
+    }
+
+    Write-Output $Result
 }
 
 function Get-Recommend {
     param (
-        $PageIndex,
-        $PageSize
+        $Offset,
+        $Size
     )
-    Write-Output "Get-Recommend"
+
+    $Query = 'SELECT * FROM Recommends ORDER BY "id" DESC LIMIT @offset,@size;'
+
+    $Result = Invoke-SqliteQuery -DataSource $Database -Query $Query -SqlParameters @{
+        offset = $Offset
+        size = $Size
+    }
+
+    Write-Output $Result
 }
 
 function Search-Recommend {
     param (
-        $Name
+        $Keyword,
+        $Offset,
+        $Size
     )
-    Write-Output "Search-Recommend"
+
+    $Query = 'SELECT * FROM Recommends WHERE "title" LIKE @keyword OR "desc" LIKE @keyword ORDER BY "id" DESC LIMIT @offset,@size;'
+
+    $Result = Invoke-SqliteQuery -DataSource $Database -Query $Query -SqlParameters @{
+        keyword = $Keyword
+        offset = $Offset
+        size = $Size
+    }
+
+    Write-Output $Result
 }
 
 Write-Output "Database is recognized"
