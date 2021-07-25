@@ -1,11 +1,38 @@
 Import-Module Polaris
 
-New-PolarisGetRoute -Path "/" -Scriptblock {
-    $Response.Send($(Get-Recommend));
+$PageSize = 8
+
+New-PolarisGetRoute -Path "/*" -Scriptblock {
+    
+    $Offset = $($Request.Query["index"] - 1) * $PageSize
+
+    $Results = Get-Recommend -Offset $Offset -Size $PageSize
+    $RespBody = ""
+
+    if ($null -ne $Results) {
+        $RespBody = $(ConvertTo-Json -InputObject $Results -Compress)
+    } else {
+        $Response.SetStatusCode(404)
+    }
+
+    $Response.Json($RespBody)
 }
 
 New-PolarisGetRoute -Path "/Search" -Scriptblock {
-    $Response.Send($(Search-Recommend));
+
+    $Offset = $($Request.Query["index"] - 1) * $PageSize
+    $Keyword = $Request.Query["keyword"]
+
+    $Results = Search-Recommend -Keyword $Keyword -Offset $Offset -Size $PageSize
+    $RespBody = ""
+
+    if ($null -ne $Results) {
+        $RespBody = $(ConvertTo-Json -InputObject $Results -Compress)
+    } else {
+        $Response.SetStatusCode(404)
+    }
+
+    $Response.Json($RespBody)
 }
 
 New-PolarisPutRoute -Path "/Add" -Scriptblock {

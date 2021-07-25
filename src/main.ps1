@@ -1,6 +1,5 @@
-. ./models/*.ps1
 . ./database.ps1
-./router.ps1
+. ./router.ps1
 
 Write-Output "Starting server..."
 Start-Polaris
