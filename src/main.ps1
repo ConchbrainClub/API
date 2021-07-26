@@ -3,7 +3,7 @@ Import-Module ./router.psm1
 
 Write-Output "Starting server..."
 
-# config middleware pipeline
+# Config middleware pipeline
 New-PolarisRouteMiddleware -Name JsonBodyParser -Scriptblock {
 
     $IsPutOrPost = $("PUT" -eq $Request.Method -or "POST" -eq $Request.Method)
@@ -12,6 +12,9 @@ New-PolarisRouteMiddleware -Name JsonBodyParser -Scriptblock {
         $Request.Body = ConvertFrom-Json -InputObject $Request.BodyString
     }
 }
+
+# Route Static file
+MapStaticFile
 
 # Route
 MapEndpoint
