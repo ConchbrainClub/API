@@ -1,4 +1,5 @@
 Import-Module PSSQLite
+Import-Module ./models/recommend.psm1
 
 $Database = "../Conchbrain.db"
 
@@ -87,5 +88,3 @@ function Search-Recommend {
 
     Write-Output $Result
 }
-
-Write-Output "Database is recognized"
