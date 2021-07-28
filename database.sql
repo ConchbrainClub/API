@@ -4,5 +4,5 @@ CREATE Table Recommends (
     "cover" VARCHAR(10),
     "desc" VARCHAR(20),
     "link" VARCHAR(10),
-    "lang" CHAR(10)
+    "Language" CHAR(10)
 );

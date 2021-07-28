@@ -1,9 +1,9 @@
+Import-Module Polaris
+Import-Module ./router.psm1
+
 Write-Output "Starting server..."
 
-Import-Module Polaris
-. ./database.ps1
-. ./router.ps1
-
+# Config middleware pipeline
 New-PolarisRouteMiddleware -Name JsonBodyParser -Scriptblock {
 
     $IsPutOrPost = $("PUT" -eq $Request.Method -or "POST" -eq $Request.Method)
@@ -13,6 +13,11 @@ New-PolarisRouteMiddleware -Name JsonBodyParser -Scriptblock {
     }
 }
 
-Start-Polaris
+# Route Static file
+MapStaticFile
 
-Write-Output "Server start successful!"
+# Route
+MapEndpoint
+
+# Start http server
+Start-Polaris -Port 5000
