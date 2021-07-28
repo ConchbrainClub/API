@@ -38,7 +38,15 @@ function MapEndpoint {
     }
 
     New-PolarisPutRoute -Path "/Add" -Scriptblock {
-        $Response.Send($(Add-Recommend));
+        # {
+        #     "title": "",
+        #     "cover": "",
+        #     "desc": "",
+        #     "link": "",
+        #     "language": ""
+        # }
+        $Result = $(Add-Recommend -Recommend $Request.Body)
+        $Response.Send($Result);
     }
 
     New-PolarisDeleteRoute -Path "/Remove" -Scriptblock {
@@ -57,7 +65,18 @@ function MapEndpoint {
     }
 
     New-PolarisPostRoute -Path "/Edit" -Scriptblock {
-        $Response.Send($(Edit-Recommend));
+        # {
+        #     "id": 0,
+        #     "recommend": {
+        #         "title": "",
+        #         "cover": "",
+        #         "desc": "",
+        #         "link": "",
+        #         "language": ""
+        #     }
+        # }
+        $Result = $(Edit-Recommend -Id $Request.Body.Id -Recommend $Request.Body.Recommend)
+        $Response.Send($Result);
     }
 }
 

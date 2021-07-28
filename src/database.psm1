@@ -1,21 +1,20 @@
 Import-Module PSSQLite
-Import-Module ./models/recommend.psm1
 
 $Database = "../Conchbrain.db"
 
 function Add-Recommend {
     param (
-        [Recommend]$Recommend
+        $Recommend
     )
 
-    $Query = 'INSERT INTO Recommends VALUES(NULL, @title, @cover, @desc, @link, @lang);'
+    $Query = 'INSERT INTO Recommends VALUES(NULL, @title, @cover, @desc, @link, @language);'
 
     $Result = Invoke-SqliteQuery -DataSource $Database -Query $Query -SqlParameters @{
         title = $Recommend.Title
         cover = $Recommend.Cover
         desc = $Recommend.Desc
         link = $Recommend.Link
-        lang = $Recommend.Lang
+        language = $Recommend.Language
     }
 
     Write-Output $Result
@@ -41,7 +40,7 @@ function Edit-Recommend {
         $Recommend
     )
     
-    $Query = 'UPDATE Recommends SET "title" = @title, "cover" = @cover, "desc" = @desc, "link" = @link, "lang" = @lang WHERE "id" = @id;'
+    $Query = 'UPDATE Recommends SET "title" = @title, "cover" = @cover, "desc" = @desc, "link" = @link, "language" = @language WHERE "id" = @id;'
 
     $Result = Invoke-SqliteQuery -DataSource $Database -Query $Query -SqlParameters @{
         id = $Id
@@ -49,7 +48,7 @@ function Edit-Recommend {
         cover = $Recommend.Cover
         desc = $Recommend.Desc
         link = $Recommend.Link
-        lang = $Recommend.Lang
+        language = $Recommend.Language
     }
 
     Write-Output $Result
