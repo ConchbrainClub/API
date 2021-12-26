@@ -21,3 +21,15 @@ MapEndpoint
 
 # Start http server
 Start-Polaris -Port 5000
+
+Write-Host "Press 'q' to exit" -NoNewline
+
+while($true)
+{
+    $key = [Console]::ReadKey('?')
+
+    if ($key.Key -eq "Q") {
+        Stop-Polaris
+        exit
+    }
+}
