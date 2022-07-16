@@ -6,11 +6,11 @@ Start-PodeServer {
     Add-PodeEndpoint -Address * -Port 8080 -Protocol Http
 
     # Config middleware pipeline
-    Add-PodeMiddleware -Name Example -ScriptBlock {
-        Add-PodeHeader -Name Name1 -Value Value1
-        Add-PodeHeader -Name Name1 -Value Value2
-        Add-PodeHeader -Name Name1 -Value Value2
-    }
+    # Add-PodeMiddleware -Name Example -ScriptBlock {
+    #     Add-PodeHeader -Name Name1 -Value Value1
+    #     Add-PodeHeader -Name Name1 -Value Value2
+    #     Add-PodeHeader -Name Name1 -Value Value2
+    # }
 
     MapEndpoint
 }

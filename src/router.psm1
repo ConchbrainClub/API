@@ -14,7 +14,7 @@ function MapEndpoint {
             $Results = @{ 'result' = 'not found' }
         }
 
-        Write-PodeJsonResponse -Value $Results
+        Write-PodeJsonResponse -Value $Offset
     }
 
     Add-PodeRoute -Method Get -Path "/Search" -Scriptblock {
@@ -40,19 +40,19 @@ function MapEndpoint {
         #     "language": ""
         # }
         $Result = $(Add-Recommend -Recommend $WebEvent.Data)
-        Write-PodeJsonResponse -Value $Results
+        Write-PodeJsonResponse -Value $Result
     }
 
     Add-PodeRoute -Method Delete -Path "/Remove" -Scriptblock {
         $Id = $WebEvent.Query["id"]
 
-        $Results = Remove-Recommend -Id $Id
+        $Result = Remove-Recommend -Id $Id
 
-        if ($null -eq $Results) {
-            $Results = @{ 'result' = 'not found' }
+        if ($null -eq $Result) {
+            $Result = @{ 'result' = 'not found' }
         }
 
-        Write-PodeJsonResponse -Value $Results
+        Write-PodeJsonResponse -Value $Result
     }
 
     Add-PodeRoute -Method Post -Path "/Edit" -Scriptblock {
