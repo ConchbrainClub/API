@@ -4,40 +4,34 @@ $Global:PageSize = 8
 
 function MapEndpoint {
 
-    New-PolarisGetRoute -Path "/" -Scriptblock {
+    Add-PodeRoute -Method Get -Path '/List' -ScriptBlock {
         
-        $Offset = $($Request.Query["index"] - 1) * $PageSize
+        $Offset = $($WebEvent.Query["index"] - 1) * $PageSize
 
         $Results = Get-Recommend -Offset $Offset -Size $PageSize
-        $RespBody = "Not found"
 
-        if ($null -ne $Results) {
-            $RespBody = $(ConvertTo-Json -InputObject $Results -Compress)
-        } else {
-            $Response.SetStatusCode(404)
+        if ($null -eq $Results) {
+            $Results = @{ 'result' = 'not found' }
         }
 
-        $Response.Json($RespBody)
+        Write-PodeJsonResponse -Value $Results
     }
 
-    New-PolarisGetRoute -Path "/Search" -Scriptblock {
+    Add-PodeRoute -Method Get -Path "/Search" -Scriptblock {
 
-        $Offset = $($Request.Query["index"] - 1) * $PageSize
-        $Keyword = $Request.Query["keyword"]
+        $Offset = $($WebEvent.Query["index"] - 1) * $PageSize
+        $Keyword = $WebEvent.Query["keyword"]
 
         $Results = Search-Recommend -Keyword $Keyword -Offset $Offset -Size $PageSize
-        $RespBody = "Not found"
 
-        if ($null -ne $Results) {
-            $RespBody = $(ConvertTo-Json -InputObject $Results -Compress)
-        } else {
-            $Response.SetStatusCode(404)
+        if ($null -eq $Results) {
+            $Results = @{ 'result' = 'not found' }
         }
 
-        $Response.Json($RespBody)
+        Write-PodeJsonResponse -Value $Results
     }
 
-    New-PolarisPutRoute -Path "/Add" -Scriptblock {
+    Add-PodeRoute -Method Put -Path "/Add" -Scriptblock {
         # {
         #     "title": "",
         #     "cover": "",
@@ -45,26 +39,23 @@ function MapEndpoint {
         #     "link": "",
         #     "language": ""
         # }
-        $Result = $(Add-Recommend -Recommend $Request.Body)
-        $Response.Send($Result);
+        $Result = $(Add-Recommend -Recommend $WebEvent.Data)
+        Write-PodeJsonResponse -Value $Results
     }
 
-    New-PolarisDeleteRoute -Path "/Remove" -Scriptblock {
-        $Id = $Request.Query["id"]
+    Add-PodeRoute -Method Delete -Path "/Remove" -Scriptblock {
+        $Id = $WebEvent.Query["id"]
 
         $Results = Remove-Recommend -Id $Id
-        $RespBody = "Not found"
 
-        if ($null -ne $Results) {
-            $RespBody = $(ConvertTo-Json -InputObject $Results -Compress)
-        } else {
-            $Response.SetStatusCode(404)
+        if ($null -eq $Results) {
+            $Results = @{ 'result' = 'not found' }
         }
 
-        $Response.Json($RespBody)
+        Write-PodeJsonResponse -Value $Results
     }
 
-    New-PolarisPostRoute -Path "/Edit" -Scriptblock {
+    Add-PodeRoute -Method Post -Path "/Edit" -Scriptblock {
         # {
         #     "id": 0,
         #     "recommend": {
@@ -75,18 +66,7 @@ function MapEndpoint {
         #         "language": ""
         #     }
         # }
-        $Result = $(Edit-Recommend -Id $Request.Body.Id -Recommend $Request.Body.Recommend)
+        $Result = $(Edit-Recommend -Id $WebEvent.Data.Id -Recommend $WebEvent.Data.Recommend)
         $Response.Send($Result);
-    }
-}
-
-function MapStaticFile {
-    param (
-        $RoutePath,
-        $Path
-    )
-
-    if ($null -ne $RoutePath -and $null -ne $Path) {
-        New-PolarisStaticRoute -RoutePath $RoutePath -Path $Path
     }
 }

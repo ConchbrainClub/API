@@ -1,35 +1,16 @@
-Import-Module Polaris
+Import-Module Pode
 Import-Module ./router.psm1
 
-Write-Output "Starting server..."
+Start-PodeServer {
+    # attach to port 8080 for http
+    Add-PodeEndpoint -Address * -Port 8080 -Protocol Http
 
-# Config middleware pipeline
-New-PolarisRouteMiddleware -Name JsonBodyParser -Scriptblock {
-
-    $IsPutOrPost = $("PUT" -eq $Request.Method -or "POST" -eq $Request.Method)
-
-    if ($Request.BodyString -ne $null -and $IsPutOrPost) {
-        $Request.Body = ConvertFrom-Json -InputObject $Request.BodyString
+    # Config middleware pipeline
+    Add-PodeMiddleware -Name Example -ScriptBlock {
+        Add-PodeHeader -Name Name1 -Value Value1
+        Add-PodeHeader -Name Name1 -Value Value2
+        Add-PodeHeader -Name Name1 -Value Value2
     }
-}
 
-# Route Static file
-MapStaticFile
-
-# Route
-MapEndpoint
-
-# Start http server
-Start-Polaris -Port 5000
-
-Write-Host "Press 'q' to exit" -NoNewline
-
-while($true)
-{
-    $key = [Console]::ReadKey('?')
-
-    if ($key.Key -eq "Q") {
-        Stop-Polaris
-        exit
-    }
+    MapEndpoint
 }
